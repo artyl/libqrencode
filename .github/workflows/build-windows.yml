@@ -1,0 +1,40 @@
+name: Build libqrencode (DLL + EXE) on Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup MSYS2 with dependencies
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-libpng
+
+      - name: Configure and Build (DLL + EXE)
+        shell: msys2 {0}
+        run: |
+          mkdir build
+          cd build
+          cmake .. -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release
+
+      - name: Upload binaries (dll + exe)
+        uses: actions/upload-artifact@v3
+        with:
+          name: qrencode-windows-build
+          path: |
+            build/bin/qrencode.exe
+            build/bin/libqrencode.dll
+            build/lib/libqrencode.dll.a
+            build/lib/libqrencode.a
