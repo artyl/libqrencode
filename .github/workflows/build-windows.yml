@@ -36,8 +36,8 @@ jobs:
         run: |
           echo ">>> Listing build directory:"
           ls -R build
-          echo ">>> Listing libqrencode:"
-          ls -R libqrencode
+          echo ">>> Listing root:"
+          ls 
         shell: bash
 
       - name: Upload binaries and headers
@@ -45,8 +45,8 @@ jobs:
         with:
           name: qrencode-windows-build
           path: |
-            build/bin/qrencode.exe
-            build/bin/libqrencode.dll
-            build/lib/libqrencode.dll.a
-            build/lib/libqrencode.a
-            libqrencode/*.h
+            build/qrencode.exe
+            build/libqrencode.dll
+            build/libqrencode.dll.a
+            build/libqrencode.a
+            qrencode.h
