@@ -18,16 +18,19 @@ jobs:
           update: true
           install: >
             mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-cmake
             mingw-w64-x86_64-libpng
+            mingw-w64-x86_64-make
+
+      - name: Install modern CMake
+        uses: lukka/get-cmake@latest
 
       - name: Configure and Build (DLL + EXE)
         shell: msys2 {0}
         run: |
           mkdir build
           cd build
-          cmake .. -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --config Release
+          /c/Program\ Files/CMake/bin/cmake.exe .. -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+          mingw32-make
 
       - name: Upload binaries and headers
         uses: actions/upload-artifact@v4
@@ -38,4 +41,4 @@ jobs:
             build/bin/libqrencode.dll
             build/lib/libqrencode.dll.a
             build/lib/libqrencode.a
-            libqrencode/qrencode.h
+            libqrencode/*.h
