@@ -32,6 +32,14 @@ jobs:
           /c/Program\ Files/CMake/bin/cmake.exe .. -G"MinGW Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
           mingw32-make
 
+      - name: Debug file structure
+        run: |
+          echo ">>> Listing build directory:"
+          ls -R build
+          echo ">>> Listing libqrencode:"
+          ls -R libqrencode
+        shell: bash
+
       - name: Upload binaries and headers
         uses: actions/upload-artifact@v4
         with:
