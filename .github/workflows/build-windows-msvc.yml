@@ -1,0 +1,36 @@
+name: Build libqrencode (DLL + EXE) with MSVC on Windows
+
+on:
+  workflow_dispatch:
+  # push:
+  #   tags:
+  #     - 'v*.*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure with CMake (MSVC)
+        run: |
+          mkdir build
+          cd build
+          cmake .. -A x64 -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config Release
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: qrencode-msvc-build
+          path: |
+            build/Release/qrencode.exe
+            build/Release/libqrencode.dll
+            build/Release/libqrencode.lib
+            qrencode.h
